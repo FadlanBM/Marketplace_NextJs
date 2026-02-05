@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,23 +8,46 @@ import { HeroHeader } from "./header";
 import { ChevronRight } from "lucide-react";
 import { Supabase } from "@/components/ui/svgs/supabase";
 import { Slack } from "@/components/ui/svgs/slack";
-import { Twilio } from "@/components/ui/svgs/twilio";
 import { Linear } from "@/components/ui/svgs/linear";
 import { Figma } from "@/components/ui/svgs/figma";
 import { Vercel } from "@/components/ui/svgs/vercel";
 import { Firebase } from "@/components/ui/svgs/firebase";
-import { ClerkIconLight as Clerk } from "@/components/ui/svgs/clerk";
 import { Claude } from "@/components/ui/svgs/claude";
 import Image from "next/image";
 import { InteractiveGridPattern } from "../../ui/interactive-grid-pattern";
 import { cn } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { messagesHero } from "@/constants/message-hero";
 
 export default function HeroSection() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background">
       <InteractiveGridPattern
         className={cn(
-          "[mask-image:radial-gradient(800px_circle_at_center,white,transparent)]",
+          "mask-[radial-gradient(800px_circle_at_center,white,transparent)]",
         )}
         width={40}
         height={40}
@@ -45,11 +70,11 @@ export default function HeroSection() {
             <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
               <div className="mx-auto mb-16 max-w-xl lg:mb-24">
                 <div className="**:fill-foreground grid scale-95 grid-cols-3 gap-12">
-                  <div className="ml-auto blur-[2px]">
+                  <div className="ml-auto">
                     <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Supabase className="size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Supabase
+                        Laravel
                       </span>
                     </Card>
                   </div>
@@ -57,15 +82,15 @@ export default function HeroSection() {
                     <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Slack className="size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Slack
+                        Next JS
                       </span>
                     </Card>
                   </div>
-                  <div className="ml-auto blur-[2px]">
+                  <div className="ml-auto">
                     <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Figma className="size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Figma
+                        React Native
                       </span>
                     </Card>
                   </div>
@@ -73,47 +98,31 @@ export default function HeroSection() {
                     <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Vercel className="size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Vercel
+                        Nest JS
                       </span>
                     </Card>
                   </div>
-                  <div className="blur-[2px]">
+                  <div>
                     <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Firebase className="size-3 sm:size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Firebase
+                        Iot
                       </span>
                     </Card>
                   </div>
                   <div>
-                    <Card className="pointer-events-auto shadow-foreground/10 mx-a flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
+                    <Card className="pointer-events-auto shadow-foreground/10 mx-auto flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Linear className="size-3 sm:size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Linear
+                        Flutter
                       </span>
                     </Card>
                   </div>
-                  <div className="ml-auto blur-[2px]">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Twilio className="size-3 sm:size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Twilio
-                      </span>
-                    </Card>
-                  </div>
-                  <div>
-                    <Card className="pointer-events-auto shadow-foreground/10 mx-a flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
+                  <div className="col-start-2">
+                    <Card className="pointer-events-auto shadow-foreground/10 mx-auto flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
                       <Claude className="size-3 sm:size-4" />
                       <span className="text-nowrap font-medium max-sm:text-xs">
-                        Claude AI
-                      </span>
-                    </Card>
-                  </div>
-                  <div className="blur-[2px]">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Clerk className="size-3 sm:size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Clerk{" "}
+                        .Net
                       </span>
                     </Card>
                   </div>
@@ -121,12 +130,43 @@ export default function HeroSection() {
               </div>
               <div className="mx-auto max-w-md text-center pointer-events-auto">
                 <h1 className="text-balance font-serif text-4xl font-medium sm:text-5xl">
-                  Ship faster. Integrate smarter.
+                  Jasa Pembuatan Aplikasi Tugas Akhir
                 </h1>
-                <p className="text-muted-foreground mt-4 text-balance">
-                  Veil is your all-in-one engine for adding seamless
-                  integrations to your app.
-                </p>
+
+                <div className="mx-auto mt-4 max-w-xs sm:max-w-md">
+                  <Carousel
+                    setApi={setApi}
+                    className="w-full"
+                    plugins={[
+                      Autoplay({
+                        delay: 3000,
+                      }),
+                    ]}
+                  >
+                    <CarouselContent>
+                      {messagesHero.map((message, index) => (
+                        <CarouselItem key={index}>
+                          <p className="text-muted-foreground text-balance">
+                            {message}
+                          </p>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
+                  <div className="flex justify-center gap-2 mt-4">
+                    {Array.from({ length: count }).map((_, index) => (
+                      <button
+                        key={index}
+                        className={cn(
+                          "h-2 w-2 rounded-full transition-colors",
+                          current === index ? "bg-primary" : "bg-primary/20",
+                        )}
+                        onClick={() => api?.scrollTo(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
 
                 <Button asChild className="mt-6 pr-1.5">
                   <Link href="#link">
