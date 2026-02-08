@@ -7,23 +7,163 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
+
+// --- ENUMERATIONS ---
+enum ProjectStatus {
+  open
+  in_progress
+  completed
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  settlement
+  expire
+  cancel
+  deny
+  refund
+}
+
+// --- MODELS ---
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password_hash    String
+  username         String    @unique
+  profile_picture  Asset?    @relation("UserProfilePicture", fields: [profilePictureId], references: [id])
+  profilePictureId String?   @unique
+  role             String
+  created_at       DateTime  @default(now())
+  updated_at       DateTime?
+  deleted_at       DateTime?
+
+  user_details          UserDetail?
+  proposals             Proposal[]
+  projects              Project[]
+  contractsAsFreelancer Contract[]  @relation("FreelancerContract")
+  contractsAsClient     Contract[]  @relation("ClientContract")
+  reviews               Review[]    @relation("Reviewee")
+  reviewsGiven          Review[]    @relation("Reviewer")
 }
 
-enum Role {
-  USER
-  ADMIN
-  SELLER
+model UserDetail {
+  id            String    @id @default(uuid())
+  user_id       String    @unique
+  phone_number  String?
+  address       String?
+  date_of_birth DateTime?
+  gender        String?
+
+  user       User      @relation(fields: [user_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  file_name   String
+  file_url    String
+  file_size   Int?
+  file_type   String?
+  bucket_name String?
+  uploaded_at DateTime @default(now())
+
+  userProfile  User?      @relation("UserProfilePicture")
+  proposals    Proposal[]
+  contractFile Contract?  @relation("ContractFile")
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  client_id   String
+  title       String
+  description String
+  budget      Float
+  start_date  DateTime?
+  end_date    DateTime?
+  status      ProjectStatus @default(open)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime?
+
+  client    User       @relation(fields: [client_id], references: [id])
+  proposals Proposal[]
+  contract  Contract?
+  reviews   Review[]
+}
+
+model Proposal {
+  id                String    @id @default(uuid())
+  freelancer_id     String
+  project_id        String
+  message           String
+  bid_amount        Float
+  asset_proposal_id String?
+  status            String    @default("pending")
+  created_at        DateTime  @default(now())
+  updated_at        DateTime?
+
+  freelancer     User       @relation(fields: [freelancer_id], references: [id])
+  project        Project    @relation(fields: [project_id], references: [id])
+  asset_proposal Asset?     @relation(fields: [asset_proposal_id], references: [id])
+  contracts      Contract[]
+}
+
+model Contract {
+  id               String    @id @default(uuid())
+  project_id       String    @unique
+  freelancer_id    String
+  client_id        String
+  proposal_id      String?
+  contract_file_id String?   @unique
+  start_date       DateTime?
+  end_date         DateTime?
+  total_price      Float
+  paid_amount      Float     @default(0)
+  payment_status   String    @default("unpaid")
+  status           String    @default("active")
+  created_at       DateTime  @default(now())
+  updated_at       DateTime?
+
+  project Project @relation(fields: [project_id], references: [id])
+
+  freelancer User @relation("FreelancerContract", fields: [freelancer_id], references: [id])
+  client     User @relation("ClientContract", fields: [client_id], references: [id])
+
+  proposal      Proposal? @relation(fields: [proposal_id], references: [id])
+  contract_file Asset?    @relation("ContractFile", fields: [contract_file_id], references: [id])
+  payments      Payment[]
+}
+
+model Payment {
+  id             String        @id @default(uuid())
+  contract_id    String
+  order_id       String        @unique
+  transaction_id String?       @unique
+  payment_type   String?
+  gross_amount   Float
+  status         PaymentStatus @default(pending)
+  snap_token     String?
+  callback_data  Json?
+  paid_at        DateTime?
+  created_at     DateTime      @default(now())
+  updated_at     DateTime?
+
+  contract Contract @relation(fields: [contract_id], references: [id])
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  project_id  String?
+  reviewer_id String
+  reviewee_id String
+  rating      Int
+  comment     String?
+  created_at  DateTime @default(now())
+
+  project  Project? @relation(fields: [project_id], references: [id])
+  reviewer User     @relation("Reviewer", fields: [reviewer_id], references: [id])
+  reviewee User     @relation("Reviewee", fields: [reviewee_id], references: [id])
 }
