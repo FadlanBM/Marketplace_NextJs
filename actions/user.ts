@@ -1,24 +1,24 @@
-'use server'
+"use server";
 
-import prisma from '@/lib/prisma'
+import prisma from "@/lib/prisma";
 
 export async function getUsers() {
   try {
     const users = await prisma.user.findMany({
       select: {
         id: true,
-        name: true,
+        username: true,
         email: true,
         role: true,
-        createdAt: true,
+        created_at: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        created_at: "desc",
       },
-    })
-    return users
+    });
+    return users;
   } catch (error) {
-    console.error('Failed to fetch users:', error)
-    throw new Error('Failed to fetch users')
+    console.error("Failed to fetch users:", error);
+    throw new Error("Failed to fetch users");
   }
 }

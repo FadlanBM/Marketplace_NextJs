@@ -7,7 +7,6 @@ import { HeroHeader } from "@/components/layout/landing/header";
 import HeroSection from "@/components/layout/landing/hero-section-2";
 import LogoCloud from "@/components/layout/landing/logo-cloud-2";
 import Pricing from "@/components/layout/landing/pricing-1";
-import { MarqueeDemo } from "@/components/layout/landing/review-testimoni";
 import Team from "@/components/layout/landing/team-1";
 
 export default function Home() {
@@ -15,11 +14,10 @@ export default function Home() {
     <main>
       <HeroHeader />
       <HeroSection />
-      <LogoCloud />
+      {/* <LogoCloud /> */}
       <Features />
       <Content />
       <Team />
-      <MarqueeDemo />
       <Pricing />
       <CallToAction />
       <FAQs />

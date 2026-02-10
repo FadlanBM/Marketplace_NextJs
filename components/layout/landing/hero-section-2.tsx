@@ -3,16 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { HeroHeader } from "./header";
 import { ChevronRight } from "lucide-react";
-import { Supabase } from "@/components/ui/svgs/supabase";
-import { Slack } from "@/components/ui/svgs/slack";
-import { Linear } from "@/components/ui/svgs/linear";
-import { Figma } from "@/components/ui/svgs/figma";
-import { Vercel } from "@/components/ui/svgs/vercel";
-import { Firebase } from "@/components/ui/svgs/firebase";
-import { Claude } from "@/components/ui/svgs/claude";
 import Image from "next/image";
 import { InteractiveGridPattern } from "../../ui/interactive-grid-pattern";
 import { cn } from "@/lib/utils";
@@ -43,11 +35,9 @@ export default function HeroSection() {
   }, [api]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-background">
+    <div className="relative w-full overflow-hidden bg-background">
       <InteractiveGridPattern
-        className={cn(
-          "mask-[radial-gradient(800px_circle_at_center,white,transparent)]",
-        )}
+        className={cn("mask-[radial-gradient(white,transparent)]")}
         width={40}
         height={40}
         squares={[100, 100]}
@@ -67,66 +57,6 @@ export default function HeroSection() {
               />
             </div>
             <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
-              <div className="mx-auto mb-16 max-w-xl lg:mb-24">
-                <div className="**:fill-foreground grid scale-95 grid-cols-3 gap-12">
-                  <div className="ml-auto">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Supabase className="size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Laravel
-                      </span>
-                    </Card>
-                  </div>
-                  <div className="ml-auto">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Slack className="size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Next JS
-                      </span>
-                    </Card>
-                  </div>
-                  <div className="ml-auto">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Figma className="size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        React Native
-                      </span>
-                    </Card>
-                  </div>
-                  <div className="mr-auto">
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Vercel className="size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Nest JS
-                      </span>
-                    </Card>
-                  </div>
-                  <div>
-                    <Card className="pointer-events-auto shadow-foreground/10 flex h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Firebase className="size-3 sm:size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Iot
-                      </span>
-                    </Card>
-                  </div>
-                  <div>
-                    <Card className="pointer-events-auto shadow-foreground/10 mx-auto flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Linear className="size-3 sm:size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        Flutter
-                      </span>
-                    </Card>
-                  </div>
-                  <div className="col-start-2">
-                    <Card className="pointer-events-auto shadow-foreground/10 mx-auto flex h-10 h-8 w-fit items-center gap-2 rounded-xl px-3 sm:h-10 sm:px-4">
-                      <Claude className="size-3 sm:size-4" />
-                      <span className="text-nowrap font-medium max-sm:text-xs">
-                        .Net
-                      </span>
-                    </Card>
-                  </div>
-                </div>
-              </div>
               <div className="mx-auto max-w-md text-center pointer-events-auto">
                 <h1 className="text-balance font-serif text-4xl font-medium sm:text-5xl">
                   Jasa Pembuatan Aplikasi Tugas Akhir

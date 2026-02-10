@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  url      = env("DATABASE_URL")
 }
 
 datasource db {
@@ -10,6 +11,11 @@ datasource db {
 }
 
 // --- ENUMERATIONS ---
+enum Role {
+  USER
+  ADMIN
+}
+
 enum ProjectStatus {
   open
   in_progress
@@ -35,7 +41,7 @@ model User {
   username         String    @unique
   profile_picture  Asset?    @relation("UserProfilePicture", fields: [profilePictureId], references: [id])
   profilePictureId String?   @unique
-  role             String
+  role             Role      @default(USER)
   created_at       DateTime  @default(now())
   updated_at       DateTime?
   deleted_at       DateTime?

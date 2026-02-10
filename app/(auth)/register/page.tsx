@@ -33,31 +33,12 @@ export default function RegisterPage() {
       </CardHeader>
       <CardContent>
         <form action={action} className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="first-name">First name</Label>
-              <Input
-                id="first-name"
-                name="firstName"
-                placeholder="Max"
-                required
-              />
-              {state?.errors?.firstName && (
-                <p className="text-red-500 text-xs">{state.errors.firstName}</p>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="last-name">Last name</Label>
-              <Input
-                id="last-name"
-                name="lastName"
-                placeholder="Robinson"
-                required
-              />
-              {state?.errors?.lastName && (
-                <p className="text-red-500 text-xs">{state.errors.lastName}</p>
-              )}
-            </div>
+          <div className="grid gap-2">
+            <Label htmlFor="first-name">Username</Label>
+            <Input id="username" name="username" placeholder="Max" required />
+            {state?.errors?.username && (
+              <p className="text-red-500 text-xs">{state.errors.username}</p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
