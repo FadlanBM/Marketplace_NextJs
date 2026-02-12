@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   motion,
@@ -19,6 +20,7 @@ const menuItems = [
 ];
 
 export const HeroHeader = () => {
+  const {status } = useSession();
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { scrollY } = useScroll();
@@ -72,16 +74,26 @@ export const HeroHeader = () => {
                   isScrolled && "lg:opacity-0 lg:blur-[4px]",
                 )}
               >
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/login">
-                    <span>Login</span>
-                  </Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href="/register">
-                    <span>Sign Up</span>
-                  </Link>
-                </Button>
+                {status === "authenticated" ? (
+                  <Button asChild size="sm">
+                    <Link href="/user-dashboard">
+                      <span>Dashboard</span>
+                    </Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button asChild variant="ghost" size="sm">
+                      <Link href="/login">
+                        <span>Login</span>
+                      </Link>
+                    </Button>
+                    <Button asChild size="sm">
+                      <Link href="/register">
+                        <span>Sign Up</span>
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
