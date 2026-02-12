@@ -37,7 +37,7 @@ export async function loginUser(prevState: LoginState, formData: FormData) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/user-dashboard", // Or use callbackUrl if passed
+      redirectTo: "/", // Or use callbackUrl if passed
     });
   } catch (error) {
     if (error instanceof AuthError) {

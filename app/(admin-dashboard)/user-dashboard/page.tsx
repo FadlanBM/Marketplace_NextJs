@@ -1,16 +1,26 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
-import { SiteHeader } from "@/components/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { AppSidebar } from "@/components/app-sidebar";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { DataTable } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { CompleteProfileDialog } from "@/components/complete-profile-dialog";
+import data from "./data.json";
 
-import data from "./data.json"
+export default async function Page() {
+  const session = await auth();
 
-export default function Page() {
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.userDetail.findUnique({
+    where: { user_id: session.user.id },
+  });
+
   return (
     <SidebarProvider
       style={
@@ -20,6 +30,7 @@ export default function Page() {
         } as React.CSSProperties
       }
     >
+      {!user && <CompleteProfileDialog defaultOpen={true} />}
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
@@ -36,5 +47,5 @@ export default function Page() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

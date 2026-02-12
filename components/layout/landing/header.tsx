@@ -4,6 +4,7 @@ import { ChevronRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import {
   motion,
@@ -20,7 +21,7 @@ const menuItems = [
 ];
 
 export const HeroHeader = () => {
-  const {status } = useSession();
+  const { status } = useSession();
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { scrollY } = useScroll();
@@ -62,7 +63,9 @@ export const HeroHeader = () => {
               </button>
             </div>
 
-            {isLarge && <FloatingNavPill isScrolled={isScrolled} />}
+            {isLarge && (
+              <FloatingNavPill isScrolled={isScrolled} status={status} />
+            )}
 
             <div className="bg-card ring-border in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl p-6 shadow-2xl shadow-zinc-300/20 ring-1 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:ring-transparent dark:shadow-none dark:lg:bg-transparent">
               <div className="lg:hidden">
@@ -74,7 +77,12 @@ export const HeroHeader = () => {
                   isScrolled && "lg:opacity-0 lg:blur-[4px]",
                 )}
               >
-                {status === "authenticated" ? (
+                {status === "loading" ? (
+                  <div className="flex gap-3">
+                    <Skeleton className="h-9 w-20" />
+                    <Skeleton className="h-9 w-24" />
+                  </div>
+                ) : status === "authenticated" ? (
                   <Button asChild size="sm">
                     <Link href="/user-dashboard">
                       <span>Dashboard</span>
@@ -124,7 +132,13 @@ const NavItems = () => {
   );
 };
 
-const FloatingNavPill = ({ isScrolled }: { isScrolled: boolean }) => {
+const FloatingNavPill = ({
+  isScrolled,
+  status,
+}: {
+  isScrolled: boolean;
+  status: string;
+}) => {
   return (
     <motion.div
       animate={{
@@ -171,7 +185,11 @@ const FloatingNavPill = ({ isScrolled }: { isScrolled: boolean }) => {
             <>
               <NavItems />
               <Button asChild size="sm" className="mx-2 gap-1 pr-1">
-                <Link href="#">
+                <Link
+                  href={
+                    status == "authenticated" ? "/user-dashboard" : "/login"
+                  }
+                >
                   <span>Get started</span>
                   <ChevronRight className="opacity-50" />
                 </Link>
